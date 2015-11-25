@@ -71,7 +71,7 @@ class Calendar extends Control
 
 
 
-    public function setWeekDaysCellsTemplate($path)
+    public function setCalendarBlocksTemplate($path)
     {
         $this->calendarBlocksTemplate = $path;
     }
