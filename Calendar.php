@@ -103,18 +103,18 @@ class Calendar extends Control
 
         $this->prepareLabels();
         $this->prepareCellsLabels($this->calendarData);
+        $this->months = $this->translateMonthNames($this->months);
+        $this->calendarControls = $this->translateControlLabels($this->calendarControls);
 
         $template->calendarData = $this->calendarData;
 
-        $template->monthName = $this->getMonthName($this->month);
+        $template->calendarControls = $this->calendarControls;
+        $template->monthName = $this->months[$this->month - 1];
         $template->month = $this->month;
         $template->year = $this->year;
 
         $template->rows = $this->cellFactory->getNumberOfRows();
         $template->cols = $this->cellFactory->getNumberOfColumns();
-
-        $template->nextMonthControlLabel = $this->getMonthControlLabel('nextMonth');
-        $template->previousMonthControlLabel = $this->getMonthControlLabel('prevMonth');
 
         $template->getCellNumber = function ($row, $col) {
             return $this->cellFactory->calcNumber($row, $col);
@@ -149,17 +149,21 @@ class Calendar extends Control
     {
         foreach ($cells as $cell) {
             if (!$cell instanceof ICell) {
-                throw new \InvalidArgumentException('Members of $cells argument must be instances of ' .Cell::class);
+                throw new \InvalidArgumentException(
+                    'Members of $cells argument must be instances of ' . Cell::class
+                );
             }
 
             if ($cell->isForLabel()) {
-                $cell->setLabel($this->getWeekDayLabel($cell->getDay()->getWeekDayNumber()));
+                $cell->setLabel(
+                    $this->getWeekDayLabel($cell->getDay()->getWeekDayNumber())
+                );
             }
         }
     }
 
 
-    protected function prepareLabels()
+    private function prepareLabels()
     {
         $weekStartDay = $this->cellFactory->getWeekStartDay();
         $days = \array_splice($this->weekDays, 0, $weekStartDay);
@@ -196,34 +200,40 @@ class Calendar extends Control
 
 
     /**
-     * @param int $monthNumber
+     * @param array $monthNames
      * @return string
      */
-    protected function getMonthName($monthNumber)
+    protected function translateMonthNames($monthNames)
     {
-        $monthNumber -= 1;
-
-        $monthLabel = $this->months[$monthNumber];
         if (isset($this->translator)) {
-            $monthLabel = $this->translator->translate($monthLabel);
+            $names = [];
+            foreach ($monthNames as $key => $monthName) {
+                $names[$key] = $this->translator->translate($monthName);
+            }
+
+            return $names;
         }
 
-        return Strings::firstUpper($monthLabel);
+        return $monthNames;
     }
 
 
 
     /**
-     * @param $placeholder
-     * @return string
+     * @param array $calendarControls
+     * @return array
      */
-    protected function getMonthControlLabel($placeholder)
+    protected function translateControlLabels(array $calendarControls)
     {
         if (isset($this->translator)) {
-            return $this->translator->translate($placeholder);
+            $labels = [];
+            foreach ($calendarControls as $key => $control) {
+                    $labels[$key] = $this->translator->translate($key);
+            }
+            return $labels;
         }
 
-        return $this->calendarControls[$placeholder];
+        return $calendarControls;
     }
 
 
@@ -321,15 +331,7 @@ class Calendar extends Control
 
     public function setCalendarControls(array $calendarControls)
     {
-        $newControls = array_intersect_key($calendarControls, $this->calendarControls);
-        if (count($newControls) !== 2) {
-            throw new NumberOfMembersException('
-                Check array keys of argument $calendarControls.
-                There should be exactly 2 items with keys "nextMonth" and "prevMonth"
-            ');
-        }
-
-        $this->calendarControls = $calendarControls;
+        $this->calendarControls = array_merge($this->calendarControls, $calendarControls);
     }
 
 
