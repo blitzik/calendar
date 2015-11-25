@@ -1,0 +1,24 @@
+sunday: nedeľa
+monday: pondelok
+tuesday: utorok
+wednesday: streda
+thursday: štvrtok
+friday: piatok
+saturday: sobota
+
+january: január
+february: február
+march: marec
+april: apríl
+may: máj
+june: jún
+july: jul
+august: august
+september: september
+october: október
+november: november
+december: december
+
+prevMonth: "«"
+
+nextMonth: "»"

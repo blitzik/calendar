@@ -1,0 +1,24 @@
+sunday: neděle
+monday: pondělí
+tuesday: úterý
+wednesday: středa
+thursday: čtvrtek
+friday: pátek
+saturday: sobota
+
+january: leden
+february: únor
+march: březen
+april: duben
+may: květen
+june: červen
+july: červenec
+august: srpen
+september: září
+october: říjen
+november: listopad
+december: prosinec
+
+prevMonth: "«"
+
+nextMonth: "»"

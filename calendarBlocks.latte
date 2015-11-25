@@ -1,0 +1,35 @@
+
+{* $cell is blitzik\Date\Cell object that holds $year, $month and $day(another object) properties. *}
+{* Look at class definition for more info about $cell properties *}
+
+
+{define cal-top}
+    {* empty space above the calendar table *}
+{/define}
+
+
+
+{define cal-table-caption}
+    <caption class="cal-controls">
+    <a href="{link previousMonth}" class="ajax cal-prev-month">{$previousMonthControlLabel}</a>
+
+    <span class="cal-month-label">{$monthName} {$year}</span>
+
+    <a href="{link nextMonth}" class="ajax cal-next-month">{$nextMonthControlLabel}</a>
+    </caption>
+{/define}
+
+
+
+{define cal-th}
+    <th>{$cell->getLabel()}</th>
+{/define}
+
+
+
+{define cal-week-day}
+    {var $day = $cell->getDay()}
+    <td n:class="($day->isCurrent()) ? currentDay, ($day->getMonth() < $month) ? prev-month-day, ($day->getMonth() > $month) ? next-month-day">
+        {$day}
+    </td>
+{/define}
