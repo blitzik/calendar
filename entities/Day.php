@@ -40,7 +40,7 @@ class Day extends Object implements IDay
 
 
 
-    public function isFromCurrentDisplayedMonth()
+    public function isFromCurrentlyDisplayedMonth()
     {
         return $this->getMonth() == $this->cell->getMonth();
     }
