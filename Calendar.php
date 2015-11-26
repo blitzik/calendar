@@ -6,6 +6,7 @@ use Nette\Localization\ITranslator;
 use Nette\Application\UI\Control;
 use Nette\Utils\Validators;
 use Nette\Utils\Strings;
+use Tracy\Debugger;
 
 class Calendar extends Control
 {
@@ -51,17 +52,10 @@ class Calendar extends Control
     protected $calendarData = [];
 
     /** @var string */
-    private $calendarBlocksTemplate;
+    private $calendarBlocksTemplate = __DIR__ . '/calendarBlocks.latte';
 
     private $numberOfDaysLabelsCharactersToTruncate;
 
-    public function __construct(
-    ) {
-        $this->month = date('n');
-        $this->year = date('Y');
-
-        $this->calendarBlocksTemplate = __DIR__ . '/calendarBlocks.latte';
-    }
 
     public function setCalendarGenerator(ICalendarGenerator $generator)
     {
@@ -400,16 +394,13 @@ class Calendar extends Control
     {
         parent::loadState($params);
 
-        if (!$this->presenter->isAjax() and isset($params['month']) and isset($params['year'])) {
-            $datetime = \DateTime::createFromFormat('!Y-m', date($params['year'].'-'.$params['month']));
-            if ($datetime === false) {
-                $datetime = \DateTime::createFromFormat('!Y-m', date('Y-m'));
-            }
-
-            $this->month = $datetime->format('n');
-            $this->year = $datetime->format('Y');
+        $datetime = \DateTime::createFromFormat('!Y-m', date($this->year.'-'.$this->month));
+        if ($datetime === false) {
+            $datetime = \DateTime::createFromFormat('!Y-m', date('Y-m'));
         }
 
+        $this->month = $datetime->format('n');
+        $this->year = $datetime->format('Y');
     }
 
 }
