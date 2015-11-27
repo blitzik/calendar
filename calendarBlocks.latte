@@ -1,4 +1,3 @@
-
 {* $cell is blitzik\Date\Cell object that holds $year, $month and $day(another object) properties. *}
 {* Look at class definition for more info about $cell properties *}
 
@@ -9,14 +8,44 @@
 
 
 
-{define cal-table-caption}
+{define cal-table-top}
     <caption class="cal-controls">
     <a href="{link previousMonth}" class="ajax cal-prev-month">{$calendarControls['prevMonth']}</a>
 
-    <span class="cal-month-label">{$monthName} {$year}</span>
+    <span class="cal-month-label"><a n:tag-if="$areSelectionsActive" href="{link showMonthSelection}" class="ajax">{$monthName}</a> <a n:tag-if="$areSelectionsActive" href="{link showYearSelection}" class="ajax">{$year}</a></span>
 
     <a href="{link nextMonth}" class="ajax cal-next-month">{$calendarControls['nextMonth']}</a>
     </caption>
+{/define}
+
+
+
+{define cal-month-selection}
+<tr>
+    <td class="month-selection">
+        <ul class="month-list">
+            {for $m = 1; $m <= 12; $m++}
+                {var $mn = $months[$m - 1]}
+                <li><a href="{link selection year => $year, month => $m}" n:class="ajax, $m == date('n') ? active-month">{$mn}</a></li>
+            {/for}
+        </ul>
+    </td>
+</tr>
+{/define}
+
+
+
+{define cal-year-selection}
+<tr>
+    <td class="year-selection">
+        {var $currentYear = date('Y')}
+        <ul class="year-list">
+        {for $y = $currentYear - 15; $y <= $currentYear + 15; $y++}
+            <li><a href="{link selection year => $y, month => $month}" n:class="ajax, $y == date('Y') ? active-year">{$y}</a></li>
+        {/for}
+        </ul>
+    </td>
+</tr>
 {/define}
 
 
@@ -32,4 +61,16 @@
     <td n:class="($day->isCurrent()) ? currentDay, ($day->getMonth() < $month) ? prev-month-day, ($day->getMonth() > $month) ? next-month-day">
         {$day}
     </td>
+{/define}
+
+
+
+{define cal-table-bottom}
+    {* empty space at the bottom of <table> *}
+{/define}
+
+
+
+{define cal-bottom}
+    {* empty space under the calendar <table> *}
 {/define}

@@ -6,7 +6,6 @@ use Nette\Localization\ITranslator;
 use Nette\Application\UI\Control;
 use Nette\Utils\Validators;
 use Nette\Utils\Strings;
-use Tracy\Debugger;
 
 class Calendar extends Control
 {
@@ -39,6 +38,12 @@ class Calendar extends Control
     /** @persistent */
     public $year;
 
+    /** @persistent */
+    public $monthSelection;
+
+    /** @persistent */
+    public $yearSelection;
+
     /** @var ICellFactory */
     protected $cellFactory;
 
@@ -55,6 +60,7 @@ class Calendar extends Control
     private $calendarBlocksTemplate = __DIR__ . '/calendarBlocks.latte';
 
     private $numberOfDaysLabelsCharactersToTruncate;
+    private $areSelectionsActive = false;
 
 
     public function setCalendarGenerator(ICalendarGenerator $generator)
@@ -104,8 +110,10 @@ class Calendar extends Control
 
         $template->calendarControls = $this->calendarControls;
         $template->monthName = $this->months[$this->month - 1];
+        $template->months = $this->months;
         $template->month = $this->month;
         $template->year = $this->year;
+        $template->areSelectionsActive = $this->areSelectionsActive;
 
         $template->rows = $this->cellFactory->getNumberOfRows();
         $template->cols = $this->cellFactory->getNumberOfColumns();
@@ -157,6 +165,7 @@ class Calendar extends Control
     }
 
 
+
     private function prepareLabels()
     {
         $weekStartDay = $this->cellFactory->getWeekStartDay();
@@ -175,6 +184,7 @@ class Calendar extends Control
             $i++;
         }
     }
+
 
 
     /**
@@ -241,7 +251,7 @@ class Calendar extends Control
     public function handleNextMonth()
     {
         $d = $this->getDatetime($this->month, $this->year)->modify('+1 month');
-        $this->refreshState($d);
+        $this->refreshMonthsShifting($d);
     }
 
 
@@ -249,7 +259,7 @@ class Calendar extends Control
     public function handlePreviousMonth()
     {
         $d = $this->getDatetime($this->month, $this->year)->modify('-1 month');
-        $this->refreshState($d);
+        $this->refreshMonthsShifting($d);
     }
 
 
@@ -257,11 +267,59 @@ class Calendar extends Control
     /**
      * @param \DateTime $d
      */
-    protected function refreshState(\DateTime $d)
+    protected function refreshMonthsShifting(\DateTime $d)
     {
         $this->month = $d->format('n');
         $this->year = $d->format('Y');
 
+        $this->yearSelection = null;
+        $this->monthSelection = null;
+
+        $this->refresh();
+    }
+
+
+
+    /*
+     * ---------------------------------------
+     * ----- MONTHS AND YEARS SELECTIONS -----
+     * ---------------------------------------
+     */
+
+    public function handleShowMonthSelection()
+    {
+        $this->monthSelection = true;
+        $this->yearSelection = null;
+
+        $this->refresh();
+    }
+
+
+
+    public function handleShowYearSelection()
+    {
+        $this->yearSelection = true;
+        $this->monthSelection = null;
+
+        $this->refresh();
+    }
+
+
+
+    public function handleSelection($year, $month)
+    {
+        $this->year = $year;
+        $this->month = $month;
+        $this->yearSelection = null;
+        $this->monthSelection = null;
+
+        $this->refresh();
+    }
+
+
+
+    protected function refresh()
+    {
         if ($this->presenter->isAjax()) {
             $this->redrawControl();
         } else {
@@ -269,13 +327,16 @@ class Calendar extends Control
         }
     }
 
-
-
     /*
      * -------------------------------
      * ----- COMPONENT SETTINGS ------
      * -------------------------------
      */
+
+    public function enableSelections()
+    {
+        $this->areSelectionsActive = true;
+    }
 
 
     /**

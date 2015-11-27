@@ -10,21 +10,32 @@
         {ifset #cal-top}{include #cal-top}{/ifset}
 
         <table class="calendar">
-        {ifset #cal-table-caption}{include #cal-table-caption}{/ifset}
+        {ifset #cal-table-top}{include #cal-table-top}{/ifset}
 
-        {for $row = 0; $row < $rows; $row++}
-            <tr>
-            {for $col = 0; $col < $cols; $col++}
-            {var $cell = $calendarData[$getCellNumber($row, $col)]}
-                {if $cell->isForLabel()}
-                    {include #cal-th cell => $cell}
-                {else}
-                    {include #cal-week-day cell => $cell}
-                {/if}
+        {if $areSelectionsActive and isset($control->monthSelection)}
+            {include #cal-month-selection}
+        {elseif $areSelectionsActive and isset($control->yearSelection)}
+            {include #cal-year-selection}
+        {else}
+
+            {for $row = 0; $row < $rows; $row++}
+                <tr>
+                {for $col = 0; $col < $cols; $col++}
+                {var $cell = $calendarData[$getCellNumber($row, $col)]}
+                    {if $cell->isForLabel()}
+                        {include #cal-th cell => $cell}
+                    {else}
+                        {include #cal-week-day cell => $cell}
+                    {/if}
+                {/for}
+                </tr>
             {/for}
-            </tr>
-        {/for}
+        {/if}
+
+        {ifset #cal-table-bottom}{include #cal-table-bottom}{/ifset}
         </table>
+
+        {ifset #cal-bottom}{include #cal-table-bottom}{/ifset}
     {/block}
 </div>
 
