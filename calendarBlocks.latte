@@ -26,7 +26,7 @@
         <ul class="months-list">
             {for $m = 1; $m <= 12; $m++}
                 {var $mn = $months[$m - 1]}
-                <li><a href="{link selection year => $year, month => $m}" n:class="ajax, $m == date('n') ? active-month">{$mn}</a></li>
+                <li><a href="{link selection year => $year, month => $m}" n:class="ajax, $m == date('n') ? current-month">{$mn}</a></li>
             {/for}
         </ul>
     </td>
@@ -41,7 +41,7 @@
         {var $currentYear = date('Y')}
         <ul class="years-list">
         {for $y = $currentYear - 15; $y <= $currentYear + 15; $y++}
-            <li><a href="{link selection year => $y, month => $month}" n:class="ajax, $y == date('Y') ? active-year">{$y}</a></li>
+            <li><a href="{link selection year => $y, month => $month}" n:class="ajax, $y == date('Y') ? current-year">{$y}</a></li>
         {/for}
         </ul>
     </td>
