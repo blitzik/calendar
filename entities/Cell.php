@@ -26,6 +26,9 @@ class Cell extends Object implements ICell
     /** @var Day */
     private $day;
 
+    /** @var int */
+    private $numberOfDaysInMonth;
+
     /** @var bool */
     private $isLabelCell = false;
 
@@ -35,9 +38,10 @@ class Cell extends Object implements ICell
     public function __construct($cellNumber, $year, $month, $isForLabel)
     {
         $this->number = $cellNumber;
-        $this->year = $year;
-        $this->month = $month;
+        $this->year = (int) $year;
+        $this->month = (int) $month;
         $this->isLabelCell = $isForLabel;
+        $this->numberOfDaysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
     }
 
 
@@ -92,6 +96,18 @@ class Cell extends Object implements ICell
     public function getYear()
     {
         return $this->year;
+    }
+
+
+
+    /**
+     * Returns number of days in currently displayed month
+     *
+     * @return int
+     */
+    public function getNumberOfDaysInMonth()
+    {
+       return $this->numberOfDaysInMonth;
     }
 
 

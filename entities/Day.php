@@ -24,15 +24,14 @@ class Day extends Object implements IDay
     public function __construct(ICell $cell)
     {
         $this->cell = $cell;
-        $this->date = $this->prepareDateForDay(
-            $cell->getNumber(),
-            $cell->getYear(),
-            $cell->getMonth()
-        );
+        $this->date = $this->prepareDateForDay($cell);
     }
 
 
 
+    /**
+     * @return bool
+     */
     public function isCurrent()
     {
         return $this->date == \DateTime::createFromFormat('!Y-m-d', date('Y-m-d'));
@@ -40,11 +39,33 @@ class Day extends Object implements IDay
 
 
 
+    /**
+     * @return bool
+     */
     public function isFromCurrentlyDisplayedMonth()
     {
-        return $this->getMonth() == $this->cell->getMonth();
+        return $this->getMonth() === $this->cell->getMonth();
     }
 
+
+
+    /**
+     * @return bool
+     */
+    public function isFromPreviousMonth()
+    {
+        return $this->cell->getNumber() <= 0;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isFromNextMonth()
+    {
+        return $this->cell->getNumber() > $this->cell->getNumberOfDaysInMonth();
+    }
 
 
     /**
@@ -56,7 +77,7 @@ class Day extends Object implements IDay
             $this->month = $this->date->format('n');
         }
 
-        return $this->month;
+        return (int) $this->month;
     }
 
 
@@ -70,7 +91,7 @@ class Day extends Object implements IDay
             $this->day = $this->date->format('j');
         }
 
-        return $this->day;
+        return (int) $this->day;
     }
 
 
@@ -84,14 +105,14 @@ class Day extends Object implements IDay
             $this->year = $this->date->format('Y');
         }
 
-        return $this->year;
+        return (int) $this->year;
     }
 
 
 
     public function getWeekDayNumber()
     {
-        return $this->date->format('w');
+        return (int) $this->date->format('w');
     }
 
 
@@ -104,27 +125,24 @@ class Day extends Object implements IDay
 
 
     /**
-     * @param int $cellNumber
-     * @param int $year
-     * @param int $month
+     * @param ICell $cell
      * @return \DateTime
      */
-    private function prepareDateForDay($cellNumber, $year, $month)
+    private function prepareDateForDay(ICell $cell)
     {
-        $d = \DateTime::createFromFormat('!Y-m', "$year-$month");
-        $numberOfDays = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+        $d = \DateTime::createFromFormat('!Y-m', "{$cell->getYear()}-{$cell->getMonth()}");
 
-        if ($cellNumber <= 0) {
-            $days = abs($cellNumber - 1);
+        if ($cell->getNumber() <= 0) {
+            $days = abs($cell->getNumber() - 1);
             $d->sub(new \DateInterval('P'.$days.'D'));
 
-        } elseif ($cellNumber > $numberOfDays) {
-            $days = $cellNumber - 1;
+        } elseif ($cell->getNumber() > $this->cell->getNumberOfDaysInMonth()) {
+            $days = $cell->getNumber() - 1;
             $d->add(new \DateInterval('P'.$days.'D'));
 
         } else { // 0 < $cellNumber <= $numberOfDays
-            $days = $cellNumber;
-            $d = new \DateTime($year.'-'.$month.'-'.$days);
+            $days = $cell->getNumber();
+            $d = new \DateTime($cell->getYear().'-'.$cell->getMonth().'-'.$days);
         }
 
         return $d;
