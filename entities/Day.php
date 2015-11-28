@@ -44,7 +44,7 @@ class Day extends Object implements IDay
      */
     public function isFromCurrentlyDisplayedMonth()
     {
-        return $this->getMonth() === $this->cell->getMonth();
+        return $this->getMonth() === $this->cell->getMonth()  and !$this->cell->isForLabel();
     }
 
 

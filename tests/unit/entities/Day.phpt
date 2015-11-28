@@ -30,3 +30,12 @@ $day = $cell->getDay();
 Assert::false($day->isFromPreviousMonth());
 Assert::false($day->isFromCurrentlyDisplayedMonth());
 Assert::true($day->isFromNextMonth());
+
+
+
+$cell = new \blitzik\Calendar\Cell(15, 2015, 12, true); // cell is for label
+$day = $cell->getDay();
+
+Assert::false($day->isFromPreviousMonth());
+Assert::false($day->isFromCurrentlyDisplayedMonth());
+Assert::false($day->isFromNextMonth());
