@@ -54,7 +54,7 @@ class Day extends Object implements IDay
      */
     public function isFromPreviousMonth()
     {
-        return $this->cell->getNumber() <= 0;
+        return $this->cell->getNumber() <= 0 and !$this->cell->isForLabel();
     }
 
 
@@ -64,7 +64,8 @@ class Day extends Object implements IDay
      */
     public function isFromNextMonth()
     {
-        return $this->cell->getNumber() > $this->cell->getNumberOfDaysInMonth();
+        return $this->cell->getNumber() > $this->cell->getNumberOfDaysInMonth()
+               and !$this->cell->isForLabel();
     }
 
 
@@ -110,6 +111,9 @@ class Day extends Object implements IDay
 
 
 
+    /**
+     * @return int
+     */
     public function getWeekDayNumber()
     {
         return (int) $this->date->format('w');
