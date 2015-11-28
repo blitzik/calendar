@@ -40,36 +40,6 @@ class Day extends Object implements IDay
 
 
     /**
-     * @return bool
-     */
-    public function isFromCurrentlyDisplayedMonth()
-    {
-        return $this->getMonth() === $this->cell->getMonth()  and !$this->cell->isForLabel();
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function isFromPreviousMonth()
-    {
-        return $this->cell->getNumber() <= 0 and !$this->cell->isForLabel();
-    }
-
-
-
-    /**
-     * @return bool
-     */
-    public function isFromNextMonth()
-    {
-        return $this->cell->getNumber() > $this->cell->getNumberOfDaysInMonth()
-               and !$this->cell->isForLabel();
-    }
-
-
-    /**
      * @return int
      */
     public function getMonth()

@@ -58,7 +58,7 @@
 
 {define cal-week-day}
     {var $day = $cell->getDay()}
-    <td n:class="($day->isCurrent()) ? currentDay, $day->isFromPreviousMonth() ? prev-month-day, $day->isFromNextMonth() ? next-month-day">
+    <td n:class="($day->isCurrent()) ? currentDay : $cell->getNumber() <= 0 ? prev-month-day, $cell->getNumber() > $cell->getNumberOfDaysInMonth() ? next-month-day">
         {$day}
     </td>
 {/define}
