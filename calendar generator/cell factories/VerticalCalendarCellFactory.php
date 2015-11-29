@@ -23,7 +23,7 @@ class VerticalCalendarCellFactory extends CellFactory
      */
     public function calcNumber($row, $col)
     {
-        return ($col - 1) * 7 - $this->calendarStartDay + 2 + $row;
+        return ($col - 1) * 7 - $this->calendarStartDay + $row;
     }
 
 }

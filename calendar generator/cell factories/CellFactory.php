@@ -75,7 +75,7 @@ abstract class CellFactory extends Object implements ICellFactory
             $start = 7 - ($this->weekStartDay - $firstWeekDayOfMonth);
         }
 
-        return $start + 1;
+        return $start - 1;
     }
 
 
