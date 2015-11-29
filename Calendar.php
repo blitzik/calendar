@@ -2,35 +2,19 @@
 
 namespace blitzik\Calendar;
 
+use bitzik\Calendar\LocaleNotFoundException;
 use Nette\Localization\ITranslator;
 use Nette\Application\UI\Control;
 use Nette\Utils\Validators;
-use Nette\Utils\Strings;
 
 class Calendar extends Control
 {
+    const LANG_CS = 'cs', LANG_SK = 'sk';
+
     // days for setting up calendar start day
     const MONDAY   = 1, TUESDAY = 2, WEDNESDAY = 3;
     const THURSDAY = 4, FRIDAY  = 5, SATURDAY  = 6;
     const SUNDAY   = 0;
-
-    protected $weekDays = [
-        'sunday', 'monday', 'tuesday',
-        'wednesday', 'thursday', 'friday',
-        'saturday'
-    ];
-
-    protected $months = [
-        'january', 'february', 'march',
-        'april', 'may', 'june',
-        'july', 'august', 'september',
-        'october', 'november', 'december'
-    ];
-
-    protected $calendarControls = [
-        'nextMonth' => '»',
-        'prevMonth' => '«'
-    ];
 
     /** @persistent */
     public $month;
@@ -59,15 +43,21 @@ class Calendar extends Control
     /** @var string */
     private $calendarBlocksTemplate = __DIR__ . '/calendarBlocks.latte';
 
+    /** @var string */
+    private $pathToDictionary;
+
     private $numberOfDaysLabelsCharactersToTruncate;
     private $areSelectionsActive = false;
 
 
 
-    public function __construct()
+    public function __construct($locale = 'en')
     {
         $this->month = date('n');
         $this->year = date('Y');
+
+        $this->loadLocale($locale);
+        $this->translator = new BasicTranslator($this->pathToDictionary);
     }
 
 
@@ -87,21 +77,12 @@ class Calendar extends Control
 
 
 
-    public function setTranslator(ITranslator $translator)
-    {
-        $this->translator = $translator;
-    }
-
-
-
     public function render()
     {
         $template = $this->getTemplate();
         $template->setFile($this->getTemplateFile());
 
-        if (isset($this->translator)) {
-            $template->setTranslator($this->translator);
-        }
+        $template->setTranslator($this->translator);
 
         if (!isset($this->calendarGenerator)) {
             $this->cellFactory = new HorizontalCalendarCellFactory();
@@ -110,16 +91,6 @@ class Calendar extends Control
 
         $this->calendarData = $this->getCalendarData();
 
-        $this->prepareLabels();
-        $this->prepareCellsLabels($this->calendarData);
-        $this->months = $this->translateMonthNames($this->months);
-        $this->calendarControls = $this->translateControlLabels($this->calendarControls);
-
-        $template->calendarData = $this->calendarData;
-
-        $template->calendarControls = $this->calendarControls;
-        $template->monthName = $this->months[$this->month - 1];
-        $template->months = $this->months;
         $template->month = $this->month;
         $template->year = $this->year;
         $template->areSelectionsActive = $this->areSelectionsActive;
@@ -127,8 +98,13 @@ class Calendar extends Control
         $template->rows = $this->cellFactory->getNumberOfRows();
         $template->cols = $this->cellFactory->getNumberOfColumns();
 
-        $template->getCellNumber = function ($row, $col) {
-            return $this->cellFactory->calcNumber($row, $col);
+        $template->getCell = function ($row, $col) {
+            $cellNumber =  $this->cellFactory->calcNumber($row, $col);
+            return $this->calendarData[$cellNumber];
+        };
+
+        $template->getMonthName = function ($monthNumber) {
+            return $this->getMonthName($monthNumber);
         };
 
         $template->calendarBlocksTemplate = $this->calendarBlocksTemplate;
@@ -156,97 +132,11 @@ class Calendar extends Control
 
 
 
-    protected function prepareCellsLabels(array $cells)
+    public function getMonthName($monthNumber)
     {
-        foreach ($cells as $cell) {
-            if (!$cell instanceof ICell) {
-                throw new \InvalidArgumentException(
-                    'Members of $cells argument must be instances of ' . Cell::class
-                );
-            }
+        Validators::assert($monthNumber, 'numericint:1..12');
 
-            if ($cell->isForLabel()) {
-                $cell->setLabel(
-                    $this->getWeekDayLabel($cell->getDay()->getWeekDayNumber())
-                );
-            }
-        }
-    }
-
-
-
-    private function prepareLabels()
-    {
-        $weekStartDay = $this->cellFactory->getWeekStartDay();
-        $days = \array_splice($this->weekDays, 0, $weekStartDay);
-
-        $this->weekDays = array_merge($this->weekDays, $days);
-
-        $i = $weekStartDay;
-        $d = $this->weekDays;
-        $this->weekDays = [];
-        foreach ($d as $day) {
-            if ($i > 6) {
-                $i = 0;
-            }
-            $this->weekDays[$i] = $day;
-            $i++;
-        }
-    }
-
-
-
-    /**
-     * @param int $index
-     * @return string
-     */
-    protected function getWeekDayLabel($index)
-    {
-        $label = $this->weekDays[$index];
-        if (isset($this->translator)) {
-            $label = $this->translator->translate($label);
-        }
-
-        return Strings::substring($label, 0, $this->numberOfDaysLabelsCharactersToTruncate);
-    }
-
-
-
-    /**
-     * @param array $monthNames
-     * @return string
-     */
-    protected function translateMonthNames($monthNames)
-    {
-        if (isset($this->translator)) {
-            $names = [];
-            foreach ($monthNames as $key => $monthName) {
-                $names[$key] = $this->translator->translate($monthName);
-            }
-
-            return $names;
-        }
-
-        return $monthNames;
-    }
-
-
-
-    /**
-     * @param array $calendarControls
-     * @return array
-     */
-    protected function translateControlLabels(array $calendarControls)
-    {
-        if (isset($this->translator)) {
-            $labels = [];
-            foreach ($calendarControls as $key => $control) {
-                    $labels[$key] = $this->translator->translate($key);
-            }
-            return $labels;
-        }
-
-        return $calendarControls;
+        return strtolower(\DateTime::createFromFormat('!m', $monthNumber)->format('F'));
     }
 
 
@@ -383,56 +273,28 @@ class Calendar extends Control
 
 
 
-    /**
-     * @param array $daysLabels array with labels for days and keys that are Numeric representations of the days of the week [0 => Sunday, 1=> Monday etc...]
-     */
-    public function setWeekDaysLabels(array $daysLabels)
+    public function setPathToDictionary($pathToDictionary)
     {
-        $this->weekDays = $this->prepareItems($daysLabels, 7);
+        $this->pathToDictionary = $pathToDictionary;
+        if ($this->translator instanceof BasicTranslator) {
+            $this->translator->setPathToDictionary($pathToDictionary);
+        }
     }
 
 
 
-    public function setCalendarControls(array $calendarControls)
+    protected function loadLocale($locale)
     {
-        $this->calendarControls = array_merge($this->calendarControls, $calendarControls);
-    }
+        $path = __DIR__ . '/locales';
+        switch ($locale) {
+            case self::LANG_CS: $path .= '/calendar.cs_CZ.neon'; break;
+            case self::LANG_SK: $path .= '/calendar.sk_SK.neon'; break;
+            case 'en':  $path .= '/calendar.en_US.neon'; break;
 
-
-
-    /**
-     * @param array $months array with months where january starts with key 0, 1 => february etc...
-     */
-    public function setMonths(array $months)
-    {
-        $this->months = $this->prepareItems($months, 12);
-    }
-
-
-
-    /**
-     * @param array $array
-     * @param $expectedCount
-     * @return array
-     */
-    private function prepareItems(array $array, $expectedCount)
-    {
-        $c = count($array);
-        if ($c !== $expectedCount) {
-            throw new NumberOfMembersException(
-                'Expected '.$expectedCount.' items in argument $months.
-                 Instead ' .$c. ' given.'
-            );
+            default: throw new LocaleNotFoundException('Component does NOT contain default locale "' . $locale . '"');
         }
 
-        $result = [];
-        $i = 0;
-        foreach ($array as $item) {
-            $result[$i] = $item;
-            $i++;
-        }
-
-        return $result;
+        $this->pathToDictionary = $path;
     }
 
 

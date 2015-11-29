@@ -10,11 +10,11 @@
 
 {define cal-table-top}
     <caption class="cal-controls">
-    <a href="{link previousMonth}" class="ajax cal-prev-month">{$calendarControls['prevMonth']}</a>
+    <a href="{link previousMonth}" class="ajax cal-prev-month">{_previous}</a>
 
-    <span class="cal-month-label"><a n:tag-if="$areSelectionsActive" href="{link showMonthSelection}" class="ajax">{$monthName}</a> <a n:tag-if="$areSelectionsActive" href="{link showYearSelection}" class="ajax">{$year}</a></span>
+    <span class="cal-month-label"><a n:tag-if="$areSelectionsActive" href="{link showMonthSelection}" class="ajax">{_$getMonthName($month)}</a> <a n:tag-if="$areSelectionsActive" href="{link showYearSelection}" class="ajax">{$year}</a></span>
 
-    <a href="{link nextMonth}" class="ajax cal-next-month">{$calendarControls['nextMonth']}</a>
+    <a href="{link nextMonth}" class="ajax cal-next-month">{_next}</a>
     </caption>
 {/define}
 
@@ -25,8 +25,7 @@
     <td class="months-selection">
         <ul class="months-list">
             {for $m = 1; $m <= 12; $m++}
-                {var $mn = $months[$m - 1]}
-                <li><a href="{link selection year => $year, month => $m}" n:class="ajax, $m == date('n') ? current-month">{$mn}</a></li>
+                <li><a href="{link selection year => $year, month => $m}" n:class="ajax, $m == date('n') ? current-month">{_$getMonthName($m)}</a></li>
             {/for}
         </ul>
     </td>
@@ -51,7 +50,7 @@
 
 
 {define cal-th}
-    <th>{$cell->getLabel()}</th>
+    <th>{_$cell->getLabel()}</th>
 {/define}
 
 

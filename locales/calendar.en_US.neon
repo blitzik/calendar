@@ -19,6 +19,5 @@ october: october
 november: november
 december: december
 
-prevMonth: "«"
-
-nextMonth: "»"
+previous: "«"
+next: "»"
