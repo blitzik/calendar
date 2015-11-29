@@ -21,7 +21,7 @@
             {for $row = 0; $row < $rows; $row++}
                 <tr>
                 {for $col = 0; $col < $cols; $col++}
-                {var $cell = $calendarData[$getCellNumber($row, $col)]}
+                {var $cell = $getCell($row, $col)}
                     {if $cell->isForLabel()}
                         {include #cal-th cell => $cell}
                     {else}

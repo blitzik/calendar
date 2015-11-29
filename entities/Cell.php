@@ -45,16 +45,15 @@ class Cell extends Object implements ICell
     }
 
 
-
-    public function setLabel($label)
-    {
-        $this->label = $label;
-    }
-
-
-
+    /**
+     * @return string|null
+     */
     public function getLabel()
     {
+        if (!isset($this->label) and $this->isLabelCell) {
+            $this->label = strtolower($this->getDay()->getDateTime()->format('l'));
+        }
+
         return $this->label;
     }
 
