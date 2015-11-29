@@ -62,6 +62,13 @@ class Calendar extends Control
 
 
 
+    public function setTranslator(ITranslator $translator)
+    {
+        $this->translator = $translator;
+    }
+
+
+
     public function setCalendarGenerator(ICalendarGenerator $generator)
     {
         $this->calendarGenerator = $generator;
@@ -82,7 +89,9 @@ class Calendar extends Control
         $template = $this->getTemplate();
         $template->setFile($this->getTemplateFile());
 
-        $template->setTranslator($this->translator);
+        if (isset($this->translator)) {
+            $template->setTranslator($this->translator);
+        }
 
         if (!isset($this->calendarGenerator)) {
             $this->cellFactory = new HorizontalCalendarCellFactory();
@@ -94,6 +103,7 @@ class Calendar extends Control
         $template->month = $this->month;
         $template->year = $this->year;
         $template->areSelectionsActive = $this->areSelectionsActive;
+        $template->charsToShortTo = $this->numberOfDaysLabelsCharactersToTruncate;
 
         $template->rows = $this->cellFactory->getNumberOfRows();
         $template->cols = $this->cellFactory->getNumberOfColumns();
