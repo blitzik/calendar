@@ -7,13 +7,13 @@ use Nette\Object;
 abstract class CellFactory extends Object implements ICellFactory
 {
     /** @var int */
-    protected $year;
+    private $year;
 
     /** @var int */
-    protected $month;
+    private $month;
 
     /** @var int */
-    protected $calendarStartDay;
+    private $calendarStartDay;
 
     /** @var int */
     private $weekStartDay = 0;
@@ -31,12 +31,6 @@ abstract class CellFactory extends Object implements ICellFactory
 
         $d = \DateTime::createFromFormat('!Y-m', $year.'-'.$month);
         $this->calendarStartDay = $this->getCountStart((int) date('w', $d->getTimestamp()));
-    }
-
-
-    public function getWeekStartDay()
-    {
-        return $this->weekStartDay;
     }
 
 
@@ -96,6 +90,43 @@ abstract class CellFactory extends Object implements ICellFactory
     public function getNumberOfColumns()
     {
         return 7;
+    }
+
+
+
+    /**
+     * @return int
+     */
+    public function getYear()
+    {
+        return $this->year;
+    }
+
+
+
+    /**
+     * @return int
+     */
+    public function getMonth()
+    {
+        return $this->month;
+    }
+
+
+
+    /**
+     * @return int
+     */
+    public function getCalendarStartDay()
+    {
+        return $this->calendarStartDay;
+    }
+
+
+
+    public function getWeekStartDay()
+    {
+        return $this->weekStartDay;
     }
 
 }

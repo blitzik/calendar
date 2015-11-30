@@ -23,7 +23,7 @@ class HorizontalCalendarCellFactory extends CellFactory
      */
     public function calcNumber($row, $col)
     {
-        return ($row - 1) * 7 - $this->calendarStartDay + $col;
+        return ($row - 1) * 7 - $this->getCalendarStartDay() + $col;
     }
 
 }

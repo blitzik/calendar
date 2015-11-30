@@ -7,7 +7,7 @@ use Nette\Object;
 class Day extends Object implements IDay
 {
     /** @var ICell */
-    protected $cell;
+    private $cell;
 
     /** @var int */
     private $year;
@@ -35,6 +35,16 @@ class Day extends Object implements IDay
     public function isCurrent()
     {
         return $this->date == \DateTime::createFromFormat('!Y-m-d', date('Y-m-d'));
+    }
+
+
+
+    /**
+     * @return ICell
+     */
+    public function getCell()
+    {
+        return $this->cell;
     }
 
 
