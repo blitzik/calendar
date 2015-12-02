@@ -1,6 +1,6 @@
 <?php
 
-namespace blitzik\Calendar;
+namespace blitzik\Calendar\Factories;
 
 class HorizontalCalendarCellFactory extends CellFactory
 {

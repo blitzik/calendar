@@ -1,6 +1,8 @@
 <?php
 
-namespace blitzik\Calendar;
+namespace blitzik\Calendar\Factories;
+
+use blitzik\Calendar\Entities\ICell;
 
 interface ICellFactory
 {

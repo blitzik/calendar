@@ -1,5 +1,5 @@
 <?php
 
-namespace bitzik\Calendar;
+namespace bitzik\Calendar\Exceptions;
 
 class LocaleNotFoundException extends \LogicException {}

@@ -1,7 +1,9 @@
 <?php
 
-namespace blitzik\Calendar;
+namespace blitzik\Calendar\Factories;
 
+use blitzik\Calendar\Entities\Cell;
+use blitzik\Calendar\Entities\ICell;
 use Nette\Object;
 
 abstract class CellFactory extends Object implements ICellFactory

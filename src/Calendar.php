@@ -2,7 +2,12 @@
 
 namespace blitzik\Calendar;
 
-use bitzik\Calendar\LocaleNotFoundException;
+use bitzik\Calendar\Exceptions\LocaleNotFoundException;
+use blitzik\Calendar\Factories\HorizontalCalendarCellFactory;
+use blitzik\Calendar\Factories\ICellFactory;
+use blitzik\Calendar\Generator\CalendarGenerator;
+use blitzik\Calendar\Generator\ICalendarGenerator;
+use blitzik\Calendar\Locales\BasicTranslator;
 use Nette\Localization\ITranslator;
 use Nette\Application\UI\Control;
 use Nette\Utils\Validators;
@@ -295,7 +300,7 @@ class Calendar extends Control
 
     protected function loadLocale($locale)
     {
-        $path = __DIR__ . '/locales';
+        $path = __DIR__ . '/Locales';
         switch ($locale) {
             case self::LANG_CS: $path .= '/calendar.cs_CZ.neon'; break;
             case self::LANG_SK: $path .= '/calendar.sk_SK.neon'; break;

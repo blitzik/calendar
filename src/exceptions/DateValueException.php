@@ -1,5 +1,5 @@
 <?php
 
-namespace blitzik\Calendar;
+namespace blitzik\Calendar\Exceptions;
 
 class DateValueException extends \LogicException {}

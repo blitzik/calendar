@@ -1,6 +1,8 @@
 <?php
 
-namespace blitzik\Calendar;
+namespace blitzik\Calendar\Generator;
+
+use blitzik\Calendar\Entities\ICell;
 
 interface ICalendarGenerator
 {

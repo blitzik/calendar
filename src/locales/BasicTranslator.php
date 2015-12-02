@@ -1,6 +1,6 @@
 <?php
 
-namespace blitzik\Calendar;
+namespace blitzik\Calendar\Locales;
 
 use Nette\Localization\ITranslator;
 use Nette\Localization\message;

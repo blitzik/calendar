@@ -1,6 +1,6 @@
 <?php
 
-namespace blitzik\Calendar;
+namespace blitzik\Calendar\Entities;
 
 interface ICell
 {

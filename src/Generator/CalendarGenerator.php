@@ -1,7 +1,8 @@
 <?php
 
-namespace blitzik\Calendar;
+namespace blitzik\Calendar\Generator;
 
+use blitzik\Calendar\Factories\ICellFactory;
 use Nette\Object;
 
 class CalendarGenerator extends Object implements ICalendarGenerator
