@@ -17,9 +17,7 @@
   },
 
   "autoload": {
-    "psr-4": {
-      "blitzik\\Calendar\\": "src/"
-    }
+    "classmap": ["src/"]
   }
 
 }
