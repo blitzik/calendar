@@ -1,13 +1,18 @@
 <?php
 
+/**
+ * @license MIT
+ * @author  Ales Tichava
+ */
+
 namespace blitzik\Calendar;
 
-use bitzik\Calendar\Exceptions\LocaleNotFoundException;
 use blitzik\Calendar\Factories\HorizontalCalendarCellFactory;
-use blitzik\Calendar\Factories\ICellFactory;
-use blitzik\Calendar\Generator\CalendarGenerator;
+use bitzik\Calendar\Exceptions\LocaleNotFoundException;
 use blitzik\Calendar\Generator\ICalendarGenerator;
+use blitzik\Calendar\Generator\CalendarGenerator;
 use blitzik\Calendar\Locales\BasicTranslator;
+use blitzik\Calendar\Factories\ICellFactory;
 use Nette\Localization\ITranslator;
 use Nette\Application\UI\Control;
 use Nette\Utils\Validators;

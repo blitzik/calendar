@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @license MIT
+ * @author  Ales Tichava
+ */
+
 namespace blitzik\Calendar\Factories;
 
 class HorizontalCalendarCellFactory extends CellFactory

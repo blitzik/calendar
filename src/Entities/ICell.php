@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @license MIT
+ * @author  Ales Tichava
+ */
+
 namespace blitzik\Calendar\Entities;
 
 interface ICell
