@@ -2,6 +2,7 @@
   "name": "blitzik/calendar",
   "description": "Blitzik Calendar is universal calendar component for awesome PHP framework called Nette",
   "keywords": ["nette", "calendar"],
+  "license": ["MIT"],
   "authors": [
       {
         "name": "Aleš Tichava",
