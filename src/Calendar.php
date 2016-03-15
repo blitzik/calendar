@@ -350,10 +350,10 @@ class Calendar extends Control
         $datetime = \DateTime::createFromFormat('!Y-m', date($this->year.'-'.$this->month));
         if ($datetime === false) {
             $datetime = \DateTime::createFromFormat('!Y-m', date('Y-m'));
-
-            $this->month = $datetime->format('n');
-            $this->year = $datetime->format('Y');
         }
+
+        $this->month = $datetime->format('n');
+        $this->year = $datetime->format('Y');
     }
 
 }
