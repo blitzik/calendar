@@ -51,7 +51,7 @@ class Calendar extends Control
     protected $calendarData = [];
 
     /** @var string */
-    private $calendarBlocksTemplate = __DIR__ . '/calendarBlocks.latte';
+    private $calendarBlocksTemplate;
 
     /** @var string */
     private $pathToDictionary;
@@ -67,6 +67,7 @@ class Calendar extends Control
         $this->year = date('Y');
 
         $this->loadLocale($locale);
+        $this->calendarBlocksTemplate = __DIR__ . '/calendarBlocks.latte';
         $this->translator = new BasicTranslator($this->pathToDictionary);
     }
 
