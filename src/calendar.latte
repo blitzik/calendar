@@ -19,7 +19,7 @@
         {else}
 
             {for $row = 0; $row < $rows; $row++}
-                <tr>
+                <tr n:class="$row == 0 ? 'days' : 'week'">
                 {for $col = 0; $col < $cols; $col++}
                 {var $cell = $getCell($row, $col)}
                     {if $cell->isForLabel()}
