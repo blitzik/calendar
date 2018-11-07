@@ -9,10 +9,12 @@ namespace blitzik\Calendar\Factories;
 
 use blitzik\Calendar\Entities\ICell;
 use blitzik\Calendar\Entities\Cell;
-use Nette\Object;
+use Nette\SmartObject;
 
-abstract class CellFactory extends Object implements ICellFactory
+abstract class CellFactory implements ICellFactory
 {
+    use SmartObject;
+
     /** @var int */
     private $year;
 
