@@ -7,10 +7,12 @@
 
 namespace blitzik\Calendar\Entities;
 
-use Nette\Object;
+use Nette\SmartObject;
 
-class Cell extends Object implements ICell
+class Cell implements ICell
 {
+    use SmartObject;
+
     /** @var int */
     private $number;
 

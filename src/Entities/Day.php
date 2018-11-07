@@ -7,10 +7,12 @@
 
 namespace blitzik\Calendar\Entities;
 
-use Nette\Object;
+use Nette\SmartObject;
 
-class Day extends Object implements IDay
+class Day implements IDay
 {
+    use SmartObject;
+
     /** @var ICell */
     private $cell;
 

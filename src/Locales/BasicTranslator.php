@@ -11,10 +11,12 @@ use Nette\Localization\ITranslator;
 use Nette\Localization\message;
 use Nette\Localization\plural;
 use Nette\Neon\Neon;
-use Nette\Object;
+use Nette\SmartObject;
 
-class BasicTranslator extends Object implements ITranslator
+class BasicTranslator implements ITranslator
 {
+    use SmartObject;
+
     /** @var array */
     private $dictionary;
 

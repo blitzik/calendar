@@ -8,10 +8,12 @@
 namespace blitzik\Calendar\Generator;
 
 use blitzik\Calendar\Factories\ICellFactory;
-use Nette\Object;
+use Nette\SmartObject;
 
-class CalendarGenerator extends Object implements ICalendarGenerator
+class CalendarGenerator implements ICalendarGenerator
 {
+    use SmartObject;
+
     /** @var ICellFactory  */
     private $cellFactory;
 
